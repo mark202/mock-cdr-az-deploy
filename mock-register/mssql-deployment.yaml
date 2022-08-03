@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -o ./k8s
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: mssql
+  name: mssql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: mssql
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -o ./k8s
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: mssql
+    spec:
+      containers:
+        - env:
+            - name: ACCEPT_EULA
+              value: "Y"
+            - name: SA_PASSWORD
+              value: Pa{}w0rd2019
+          image: mcr.microsoft.com/mssql/server:2019-latest
+          livenessProbe:
+            exec:
+              command:
+                - /opt/mssql-tools/bin/sqlcmd -S . -U sa -P "Pa{}w0rd2019" -Q "SELECT 1" || exit 1
+            failureThreshold: 10
+            periodSeconds: 10
+            timeoutSeconds: 10
+          name: sql1
+          ports:
+            - containerPort: 1433
+          resources: {}
+      restartPolicy: Always
+status: {}

@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -o ./k8s
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: mock-register
+  name: mock-register
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: mock-register
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -o ./k8s
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: mock-register
+    spec:
+      containers:
+        - env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Release
+            - name: IssuerUri
+              #value: https://mock-register.markhogben.com:7000/idp
+              value: https://mock-register.markhogben.com/idp
+            - name: JwksUri
+              #value: https://mock-register.markhogben.com:7000/idp/.well-known/openid-configuration/jwks
+              value: https://mock-register.markhogben.com/idp/.well-known/openid-configuration/jwks
+            - name: TokenUri
+              #value: https://mock-register.markhogben.com:7001/idp/connect/token
+              value: https://mock-register-secure.markhogben.com/idp/connect/token
+#          image: consumerdataright/mock-register
+          image: markcr1.azurecr.io/cdr-mock-register
+          # livenessProbe:
+          #   exec:
+          #     command:
+          #       - test -f /app/admin/_healthcheck_ready || exit 1
+          #   failureThreshold: 20
+          #   periodSeconds: 5
+          #   timeoutSeconds: 5
+          name: mock-register
+          ports:
+            - containerPort: 7000
+            - containerPort: 7001
+            - containerPort: 7006
+          resources: {}
+      restartPolicy: Always
+status: {}

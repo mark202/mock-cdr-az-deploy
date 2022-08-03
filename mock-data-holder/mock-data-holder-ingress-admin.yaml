@@ -1,0 +1,27 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mock-data-holder-admin
+  annotations:
+#    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    kubernetes.io/ingress.class: "external-mtls"
+spec:
+#  tls:
+#  - hosts:
+#      - mock-data-holder-admin.markhogben.com
+#    secretName: mock-data-holder-admin-tls
+
+  rules:
+    - host: mock-data-holder-admin.markhogben.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: mock-data-holder
+                port:
+                  number: 8005

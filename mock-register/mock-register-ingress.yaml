@@ -1,0 +1,80 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mock-register
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+#    nginx.ingress.kubernetes.io/auth-tls-verify-client: "optional_no_ca"
+#    nginx.ingress.kubernetes.io/auth-tls-secret: "default/cdr-mock-register-certs"
+#    nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "true"
+#    nginx.ingress.kubernetes.io/auth-tls-verify-depth: "2"
+    nginx.ingress.kubernetes.io/ssl-passthrough: "false"
+    kubernetes.io/ingress.class: "addon-http-application-routing"
+spec:
+#  tls:
+#  - hosts:
+#      - mock-register.markhogben.com
+#    secretName: mock-register-tls
+
+  rules:
+    - host: mock-register.markhogben.com
+      http:
+        paths:
+          - path: /admin
+            pathType: Prefix
+            backend:
+              service:
+                name: mock-register
+                port:
+                  number: 7006
+          - path: /cdr-register/v1/jwks
+            pathType: Prefix
+            backend:
+              service:
+                name: mock-register
+                port:
+                  number: 7000
+          - path: /cdr-register/v1/banking/data-recipients
+            pathType: Prefix
+            backend:
+              service:
+                name: mock-register
+                port:
+                  number: 7000
+          - path: /cdr-register/v1/banking/data-recipients/brands/software-products/status
+            pathType: Prefix
+            backend:
+              service:
+                name: mock-register
+                port:
+                  number: 7000
+          - path: /cdr-register/v1/banking/data-recipients/status
+            pathType: Prefix
+            backend:
+              service:
+                name: mock-register
+                port:
+                  number: 7000
+          - path: /cdr-register/v1/banking/data-holders/status
+            pathType: Prefix
+            backend:
+              service:
+                name: mock-register
+                port:
+                  number: 7000
+          - path: /idp/.well-known/openid-configuration
+            pathType: Prefix
+            backend:
+              service:
+                name: mock-register
+                port:
+                  number: 7000
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: mock-register
+                port:
+                  number: 7000

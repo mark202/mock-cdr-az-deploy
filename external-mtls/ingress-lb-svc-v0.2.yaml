@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    note: bootstrap
+    service.beta.kubernetes.io/azure-load-balancer-internal: "false"
+  labels:
+    k8s-addon: ingress-nginx.addons.k8s.io
+  name: nginx-ext-ingress-mtls
+  #namespace: kube-ingress
+spec:
+  #loadBalancerSourceRanges:
+  #- 10.6.0.0/24
+  #- 10.7.0.0/24
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: http
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: https
+  selector:
+    app: nginx-ext-ingress-mtls
+  type: LoadBalancer
