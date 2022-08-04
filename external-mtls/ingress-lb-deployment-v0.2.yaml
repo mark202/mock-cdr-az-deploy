@@ -58,6 +58,7 @@ spec:
         - --ingress-class=external-mtls
         - --election-id=nginx-ext-ingress-mtls
         - --enable-ssl-passthrough
+        - --v=3
         env:
         - name: POD_NAME
           valueFrom:
